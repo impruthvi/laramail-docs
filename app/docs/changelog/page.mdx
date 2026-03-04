@@ -9,6 +9,16 @@ All notable changes to `@impruthvi/nodemail` are documented here.
 
 ---
 
+## v1.1.2
+
+**Queue compatibility fix**
+
+- **queue**: Replace colon with underscore in queue names for BullMQ compatibility
+  - BullMQ does not allow colons (`:`) in queue names
+  - Queue names now formatted as `nodemail_mail` instead of `nodemail:mail`
+
+---
+
 ## v1.1.1
 
 **Bug fixes and test improvements**
