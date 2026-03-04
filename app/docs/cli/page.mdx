@@ -1,0 +1,421 @@
+export const metadata = {
+  title: "CLI Commands",
+  description: "Powerful CLI tool for queue management, email preview, code generation, and configuration validation.",
+};
+
+# CLI Commands
+
+The `@impruthvi/nodemail` package includes a powerful CLI tool for queue management, email preview, code generation, and configuration validation.
+
+## Installation
+
+The CLI is automatically available after installing the package:
+
+<PackageManagerTabs command="@impruthvi/nodemail" />
+
+For styled output, install the optional dependency:
+
+<PackageManagerTabs command="chalk" label="Chalk (optional)" />
+
+## Configuration
+
+The CLI automatically detects configuration files in your project root:
+
+- `nodemail.config.ts` (TypeScript, recommended)
+- `nodemail.config.js` (JavaScript)
+- `nodemail.config.mjs` (ES Module)
+- `nodemail.config.cjs` (CommonJS)
+
+### Example Configuration
+
+```typescript
+// nodemail.config.ts
+import { defineConfig } from '@impruthvi/nodemail';
+
+export default defineConfig({
+  default: 'smtp',
+  from: {
+    address: 'noreply@example.com',
+    name: 'My App',
+  },
+  mailers: {
+    smtp: {
+      driver: 'smtp',
+      host: process.env.SMTP_HOST,
+      port: 587,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    },
+  },
+  queue: {
+    driver: 'bullmq',
+    connection: { host: 'localhost', port: 6379 },
+  },
+});
+```
+
+The `defineConfig` helper provides TypeScript autocomplete for your configuration.
+
+## Commands
+
+### Queue Commands
+
+#### `queue:work`
+
+Start processing queued emails.
+
+```bash
+npx nodemail queue:work [options]
+```
+
+**Options:**
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `-q, --queue <name>` | Queue name to process | `mail` |
+| `-c, --concurrency <n>` | Number of concurrent jobs | `1` |
+| `--config <path>` | Path to config file | Auto-detected |
+
+**Example:**
+
+```bash
+# Process the default mail queue
+npx nodemail queue:work
+
+# Process with 5 concurrent workers
+npx nodemail queue:work --concurrency 5
+
+# Process a specific queue
+npx nodemail queue:work --queue notifications
+```
+
+#### `queue:status`
+
+Show queue job counts and status.
+
+```bash
+npx nodemail queue:status [options]
+```
+
+**Options:**
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `-q, --queue <name>` | Queue name to check | `mail` |
+| `--config <path>` | Path to config file | Auto-detected |
+
+**Example:**
+
+```bash
+npx nodemail queue:status
+```
+
+**Output:**
+
+```
+Queue Status: mail
+================
+
+Waiting:   15
+Active:    2
+Completed: 1,234
+Failed:    3
+Delayed:   5
+Paused:    0
+
+Total Jobs: 1,259
+```
+
+#### `queue:clear`
+
+Clear jobs from the queue by status.
+
+```bash
+npx nodemail queue:clear [options]
+```
+
+**Options:**
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `-q, --queue <name>` | Queue name | `mail` |
+| `-s, --status <status>` | Job status to clear | `failed` |
+| `-f, --force` | Skip confirmation prompt | `false` |
+| `--config <path>` | Path to config file | Auto-detected |
+
+**Valid statuses:** `completed`, `failed`, `delayed`, `waiting` (BullMQ only)
+
+**Example:**
+
+```bash
+# Clear failed jobs (with confirmation)
+npx nodemail queue:clear --status failed
+
+# Clear completed jobs without confirmation
+npx nodemail queue:clear --status completed --force
+
+# Clear delayed jobs from a specific queue
+npx nodemail queue:clear --queue notifications --status delayed
+```
+
+#### `queue:retry`
+
+Retry failed jobs in the queue.
+
+```bash
+npx nodemail queue:retry [options]
+```
+
+**Options:**
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `-q, --queue <name>` | Queue name | `mail` |
+| `-l, --limit <n>` | Maximum jobs to retry | All failed jobs |
+| `--config <path>` | Path to config file | Auto-detected |
+
+**Example:**
+
+```bash
+# Retry all failed jobs
+npx nodemail queue:retry
+
+# Retry up to 10 failed jobs
+npx nodemail queue:retry --limit 10
+```
+
+### Email Commands
+
+#### `preview`
+
+Preview an email in your browser without sending.
+
+```bash
+npx nodemail preview [options]
+```
+
+**Options:**
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `-m, --mailable <path>` | Path to Mailable class file | Required |
+| `-o, --output <path>` | Save HTML to file instead of browser | - |
+| `--config <path>` | Path to config file | Auto-detected |
+
+**Example:**
+
+```bash
+# Preview a Mailable in browser
+npx nodemail preview --mailable ./src/mail/WelcomeEmail.ts
+
+# Save preview to file
+npx nodemail preview --mailable ./src/mail/WelcomeEmail.ts --output preview.html
+```
+
+**Note:** Requires the `open` package for browser preview:
+
+<PackageManagerTabs command="open" label="Open (for browser preview)" />
+
+#### `send:test`
+
+Send a test email to verify your configuration.
+
+```bash
+npx nodemail send:test [options]
+```
+
+**Options:**
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `-t, --to <email>` | Recipient email address | Required |
+| `--mailer <name>` | Mailer to use | Default mailer |
+| `--config <path>` | Path to config file | Auto-detected |
+
+**Example:**
+
+```bash
+# Send test email to yourself
+npx nodemail send:test --to your@email.com
+
+# Test a specific mailer
+npx nodemail send:test --to your@email.com --mailer sendgrid
+```
+
+### Code Generation
+
+#### `make:mailable`
+
+Generate a new Mailable class.
+
+```bash
+npx nodemail make:mailable <name> [options]
+```
+
+**Arguments:**
+
+| Argument | Description |
+|----------|-------------|
+| `name` | Name of the Mailable class (e.g., `WelcomeEmail`) |
+
+**Options:**
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `-d, --dir <path>` | Output directory | `./src/mail` |
+| `--markdown` | Use MarkdownMailable base class | `false` |
+| `--template <name>` | Include template method with name | - |
+
+**Example:**
+
+```bash
+# Generate a basic Mailable
+npx nodemail make:mailable WelcomeEmail
+
+# Generate in a custom directory
+npx nodemail make:mailable OrderConfirmation --dir ./src/emails
+
+# Generate a MarkdownMailable
+npx nodemail make:mailable NewsletterEmail --markdown
+
+# Generate with template support
+npx nodemail make:mailable InvoiceEmail --template invoice
+```
+
+**Generated file (`src/mail/WelcomeEmail.ts`):**
+
+```typescript
+import { Mailable } from '@impruthvi/nodemail';
+
+export class WelcomeEmail extends Mailable {
+  constructor() {
+    super();
+  }
+
+  build(): this {
+    return this
+      .subject('Welcome Email')
+      .html('<h1>Welcome!</h1><p>Thank you for joining.</p>');
+  }
+}
+```
+
+### Configuration
+
+#### `config:check`
+
+Validate your mail configuration.
+
+```bash
+npx nodemail config:check [options]
+```
+
+**Options:**
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `--config <path>` | Path to config file | Auto-detected |
+| `--test` | Test provider connections | `false` |
+
+**Example:**
+
+```bash
+# Validate configuration
+npx nodemail config:check
+
+# Validate and test provider connections
+npx nodemail config:check --test
+```
+
+**Output:**
+
+```
+Configuration Check
+===================
+
+Config file found: /path/to/nodemail.config.ts
+Configuration loaded successfully
+
+Validating configuration...
+
+Default mailer: smtp
+From address: My App <noreply@example.com>
+
+Configured mailers (2):
+  smtp (default): smtp
+  sendgrid: sendgrid
+
+Queue configured: bullmq
+Templates configured: handlebars
+
+Configuration is valid!
+```
+
+## Global Options
+
+All commands support the following global options:
+
+| Option | Description |
+|--------|-------------|
+| `--config <path>` | Specify a custom config file path |
+| `-h, --help` | Show help for a command |
+| `-V, --version` | Show CLI version |
+
+## Programmatic Usage
+
+You can also use CLI functionality programmatically:
+
+```typescript
+import { QueueManager } from '@impruthvi/nodemail';
+
+// Get queue status
+const manager = new QueueManager(config.queue);
+const counts = await manager.getJobCounts('mail');
+console.log(counts);
+// { waiting: 10, active: 2, completed: 100, failed: 5, delayed: 3, paused: 0 }
+
+// Clear failed jobs
+await manager.clear('mail', 'failed');
+
+// Retry failed jobs
+const retriedCount = await manager.retryFailed('mail', 10);
+```
+
+## Troubleshooting
+
+### Config file not found
+
+Ensure your config file is in the project root and uses one of the supported names:
+- `nodemail.config.ts`
+- `nodemail.config.js`
+- `nodemail.config.mjs`
+- `nodemail.config.cjs`
+
+### Queue commands fail
+
+Make sure Redis is running and your queue configuration is correct:
+
+```typescript
+queue: {
+  driver: 'bullmq', // or 'bull'
+  connection: { host: 'localhost', port: 6379 },
+}
+```
+
+### Preview doesn't open browser
+
+Install the `open` package:
+
+<PackageManagerTabs command="open" />
+
+Or use the `--output` flag to save to a file instead.
+
+### Styled output not showing
+
+Install chalk for colored output:
+
+<PackageManagerTabs command="chalk" />
+
+The CLI works without chalk but will show plain text output.

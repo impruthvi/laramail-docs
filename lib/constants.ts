@@ -8,6 +8,7 @@ import {
   Bell,
   Eye,
   Gauge,
+  Terminal,
   type LucideIcon,
 } from "lucide-react";
 
@@ -90,6 +91,13 @@ export const FEATURES: Feature[] = [
     description:
       "Per-provider sliding window rate limiting. Stay within API limits automatically.",
     gradient: "from-red-500 to-orange-500",
+  },
+  {
+    icon: Terminal,
+    title: "CLI Commands",
+    description:
+      "Manage queues, preview emails, generate Mailables, and validate config from the command line.",
+    gradient: "from-slate-500 to-zinc-500",
   },
 ];
 

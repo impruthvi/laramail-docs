@@ -17,6 +17,7 @@ export const NAVIGATION: NavSection[] = [
       { title: "Introduction", href: "/docs/introduction" },
       { title: "Installation", href: "/docs/installation" },
       { title: "Quick Start", href: "/docs/quick-start" },
+      { title: "CLI Commands", href: "/docs/cli", badge: "New" },
     ],
   },
   {

@@ -9,6 +9,32 @@ All notable changes to `@impruthvi/nodemail` are documented here.
 
 ---
 
+## v1.1.1
+
+**Bug fixes and test improvements**
+
+- Type handling and error management in preview and queue commands
+- Improved async/sync handling in image embedding and priority tests
+- Added comprehensive test coverage for MailFacade, MailManager, Mailable, and QueueManager
+
+---
+
+## v1.1.0
+
+**CLI Commands** — powerful command-line tools for managing your email workflow.
+
+- **[CLI Commands](/docs/cli)** — New CLI tool with queue management, email preview, code generation, and configuration validation.
+  - `queue:work` — Start processing queued emails
+  - `queue:status` — Show queue job counts and status
+  - `queue:clear` — Clear jobs from the queue by status
+  - `queue:retry` — Retry failed jobs in the queue
+  - `preview` — Preview an email in your browser without sending
+  - `send:test` — Send a test email to verify configuration
+  - `make:mailable` — Generate a new Mailable class
+  - `config:check` — Validate your mail configuration
+
+---
+
 ## v1.0.1
 
 **5 new features** expanding the library's email capabilities.
