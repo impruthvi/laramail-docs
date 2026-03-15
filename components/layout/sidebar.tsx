@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { NAVIGATION, type NavSection } from "@/lib/navigation";
+import { NAVIGATION, isNewItem, type NavSection } from "@/lib/navigation";
 
 interface SidebarProps {
   className?: string;
@@ -66,9 +66,9 @@ function SidebarSection({ section }: { section: NavSection }) {
                     <span className="absolute -left-[calc(0.5rem+1px)] top-1 bottom-1 w-[2px] rounded-full bg-gradient-to-b from-neon-indigo to-neon-cyan" />
                   )}
                   {item.title}
-                  {item.badge && (
+                  {isNewItem(item) && (
                     <span className="ml-2 px-1.5 py-0.5 text-[10px] font-semibold uppercase rounded-full bg-indigo-500/15 text-indigo-400 border border-indigo-500/20">
-                      {item.badge}
+                      New
                     </span>
                   )}
                 </Link>

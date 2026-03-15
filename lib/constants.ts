@@ -12,6 +12,11 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
+// ─── Version ─────────────────────────────────────────────────────────────────
+// Single source of truth for the current laramail version.
+// Used by: hero badge, sidebar "New" badges, version banner.
+export const LARAMAIL_VERSION = "1.3.0";
+
 // ─── Brand Colors ────────────────────────────────────────────────────────────
 export const BRAND = {
   primary: "#6366f1",
@@ -31,9 +36,9 @@ export interface Feature {
 export const FEATURES: Feature[] = [
   {
     icon: Mail,
-    title: "6 Providers",
+    title: "8 Providers",
     description:
-      "SMTP, SendGrid, AWS SES, Mailgun, Resend, Postmark — switch providers with a single config change.",
+      "SMTP, SendGrid, AWS SES, Mailgun, Resend, Postmark, Log Transport, and Custom — switch with a single config change.",
     gradient: "from-indigo-500 to-blue-500",
   },
   {
@@ -152,6 +157,20 @@ export const PROVIDERS: Provider[] = [
     description: "Reliable transactional email delivery.",
     install: "npm install postmark",
     color: "#FFDE00",
+  },
+  {
+    name: "Log Transport",
+    slug: "log-transport",
+    description: "Log emails to console or file for development and testing.",
+    install: "Included",
+    color: "#34d399",
+  },
+  {
+    name: "Custom",
+    slug: "custom-providers",
+    description: "Build your own provider by implementing the transport interface.",
+    install: "Included",
+    color: "#a78bfa",
   },
 ];
 

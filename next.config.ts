@@ -10,6 +10,17 @@ const withMDX = createMDX({
     remarkPlugins: ["remark-gfm"],
     rehypePlugins: [
       "rehype-slug",
+      [
+        "rehype-autolink-headings",
+        {
+          behavior: "prepend",
+          properties: {
+            className: ["anchor-link"],
+            ariaHidden: "true",
+            tabIndex: -1,
+          },
+        },
+      ],
       ["@shikijs/rehype", { theme: "catppuccin-mocha" }],
     ],
   },

@@ -6,7 +6,7 @@ import { motion, useInView } from "motion/react";
 import { ArrowRight, Github, Check, Copy } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { CODE_EXAMPLES } from "@/lib/constants";
+import { CODE_EXAMPLES, LARAMAIL_VERSION } from "@/lib/constants";
 import { CodeBlock } from "@/components/ui/code-block";
 import { GradientOrbs } from "@/components/effects/gradient-orbs";
 import { ParticleBackground } from "@/components/effects/particle-background";
@@ -79,7 +79,7 @@ export function Hero() {
             >
               <Link href="/docs/changelog" className="relative inline-flex items-center gap-2 px-4 py-1.5 mb-8 rounded-full border border-white/10 bg-white/[0.03] text-sm text-muted-foreground overflow-hidden hover:border-white/20 hover:bg-white/[0.06] transition-all duration-300">
                 <span className="relative z-10">
-                  v1.3.0 &mdash; Log Transport, Custom Providers &amp; Always-To
+                  v{LARAMAIL_VERSION} &mdash; Log Transport, Custom Providers &amp; Always-To
                 </span>
                 {/* Shimmer effect */}
                 <div className="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/[0.07] to-transparent" />

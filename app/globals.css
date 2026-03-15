@@ -380,3 +380,27 @@
 .mdx-content img {
   @apply rounded-lg border border-border my-6;
 }
+
+/* ─── Anchor Links (rehype-autolink-headings) ────────────────────────────── */
+.mdx-content .anchor-link {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  margin-right: 0.375rem;
+  color: var(--color-muted-foreground);
+  text-decoration: none;
+}
+
+.mdx-content .anchor-link::after {
+  content: "#";
+}
+
+.mdx-content h1:hover .anchor-link,
+.mdx-content h2:hover .anchor-link,
+.mdx-content h3:hover .anchor-link,
+.mdx-content h4:hover .anchor-link {
+  opacity: 1;
+}
+
+.mdx-content .anchor-link:hover {
+  color: var(--color-primary);
+}

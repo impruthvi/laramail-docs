@@ -1,8 +1,11 @@
+import { LARAMAIL_VERSION } from "./constants";
+
 export interface NavItem {
   title: string;
   href: string;
   items?: NavItem[];
-  badge?: string;
+  /** Version when this item was added. Shows "New" badge when it matches LARAMAIL_VERSION. */
+  since?: string;
 }
 
 export interface NavSection {
@@ -17,7 +20,7 @@ export const NAVIGATION: NavSection[] = [
       { title: "Introduction", href: "/docs/introduction" },
       { title: "Installation", href: "/docs/installation" },
       { title: "Quick Start", href: "/docs/quick-start" },
-      { title: "CLI Commands", href: "/docs/cli", badge: "New" },
+      { title: "CLI Commands", href: "/docs/cli", since: "1.1.1" },
     ],
   },
   {
@@ -37,8 +40,12 @@ export const NAVIGATION: NavSection[] = [
       { title: "Mailgun", href: "/docs/providers/mailgun" },
       { title: "Resend", href: "/docs/providers/resend" },
       { title: "Postmark", href: "/docs/providers/postmark" },
-      { title: "Log Transport", href: "/docs/log-transport", badge: "New" },
-      { title: "Custom Providers", href: "/docs/custom-providers", badge: "New" },
+      { title: "Log Transport", href: "/docs/log-transport", since: "1.3.0" },
+      {
+        title: "Custom Providers",
+        href: "/docs/custom-providers",
+        since: "1.3.0",
+      },
     ],
   },
   {
@@ -54,13 +61,21 @@ export const NAVIGATION: NavSection[] = [
     title: "Advanced",
     items: [
       { title: "Markdown Mail", href: "/docs/markdown-mail" },
-      { title: "Email Priority", href: "/docs/email-priority", badge: "New" },
-      { title: "Embedded Images", href: "/docs/embedded-images", badge: "New" },
-      { title: "Email Events", href: "/docs/email-events", badge: "New" },
-      { title: "Email Preview", href: "/docs/email-preview", badge: "New" },
+      { title: "Email Priority", href: "/docs/email-priority", since: "1.1.6" },
+      {
+        title: "Embedded Images",
+        href: "/docs/embedded-images",
+        since: "1.1.6",
+      },
+      { title: "Email Events", href: "/docs/email-events", since: "1.1.6" },
+      { title: "Email Preview", href: "/docs/email-preview", since: "1.1.6" },
       { title: "Queue Support", href: "/docs/queue" },
-      { title: "Rate Limiting", href: "/docs/rate-limiting", badge: "New" },
-      { title: "Always-To Redirect", href: "/docs/always-to", badge: "New" },
+      { title: "Rate Limiting", href: "/docs/rate-limiting", since: "1.1.6" },
+      {
+        title: "Always-To Redirect",
+        href: "/docs/always-to",
+        since: "1.3.0",
+      },
       { title: "Provider Failover", href: "/docs/failover" },
     ],
   },
@@ -82,6 +97,11 @@ export const NAVIGATION: NavSection[] = [
     ],
   },
 ];
+
+/** Check if a nav item should show a "New" badge (only for current version). */
+export function isNewItem(item: NavItem): boolean {
+  return item.since === LARAMAIL_VERSION;
+}
 
 // Flatten for search index
 export function getAllNavItems(): NavItem[] {

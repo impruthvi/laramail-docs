@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { NAVIGATION } from "@/lib/navigation";
+import { NAVIGATION, isNewItem } from "@/lib/navigation";
 
 export function MobileNav() {
   const [open, setOpen] = useState(false);
@@ -61,9 +61,9 @@ export function MobileNav() {
                           )}
                         >
                           {item.title}
-                          {item.badge && (
+                          {isNewItem(item) && (
                             <span className="ml-2 px-1.5 py-0.5 text-[10px] font-semibold uppercase rounded-full bg-indigo-500/15 text-indigo-400 border border-indigo-500/20">
-                              {item.badge}
+                              New
                             </span>
                           )}
                         </Link>
