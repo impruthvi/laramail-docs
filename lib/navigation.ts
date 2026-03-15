@@ -37,6 +37,8 @@ export const NAVIGATION: NavSection[] = [
       { title: "Mailgun", href: "/docs/providers/mailgun" },
       { title: "Resend", href: "/docs/providers/resend" },
       { title: "Postmark", href: "/docs/providers/postmark" },
+      { title: "Log Transport", href: "/docs/log-transport", badge: "New" },
+      { title: "Custom Providers", href: "/docs/custom-providers", badge: "New" },
     ],
   },
   {
@@ -58,6 +60,7 @@ export const NAVIGATION: NavSection[] = [
       { title: "Email Preview", href: "/docs/email-preview", badge: "New" },
       { title: "Queue Support", href: "/docs/queue" },
       { title: "Rate Limiting", href: "/docs/rate-limiting", badge: "New" },
+      { title: "Always-To Redirect", href: "/docs/always-to", badge: "New" },
       { title: "Provider Failover", href: "/docs/failover" },
     ],
   },

@@ -1,0 +1,136 @@
+export const metadata = {
+  title: "Log Transport",
+  description: "Console-logging mail driver for local development. Prints formatted email details instead of sending — no SMTP or API keys needed.",
+};
+
+# Log Transport
+
+The `log` driver prints emails to the console instead of sending them. Ideal for local development when you don't want to configure SMTP or an API provider.
+
+---
+
+## Quick Start
+
+```typescript
+import { Mail } from 'laramail';
+
+Mail.configure({
+  default: 'log',
+  from: { address: 'dev@example.com', name: 'My App' },
+  mailers: {
+    log: { driver: 'log' },
+  },
+});
+
+await Mail.to('user@example.com')
+  .subject('Welcome!')
+  .html('<h1>Hello World!</h1>')
+  .send();
+```
+
+Output:
+
+```
+============================================================
+  MAIL LOG
+============================================================
+  To:      user@example.com
+  From:    dev@example.com
+  Subject: Welcome!
+------------------------------------------------------------
+  Body (HTML):
+  <h1>Hello World!</h1>
+============================================================
+```
+
+---
+
+## What Gets Logged
+
+The log provider prints a bordered box with all email metadata:
+
+| Field | Shown when |
+|-------|-----------|
+| **To** | Always |
+| **From** | When set |
+| **Subject** | Always |
+| **CC** | When set |
+| **BCC** | When set |
+| **Priority** | When set |
+| **Attachments** | Shows count when present |
+| **Body** | HTML preferred, falls back to text. Truncated at 500 chars. |
+
+---
+
+## Production Warning
+
+If `NODE_ENV` is set to `production`, the LogProvider emits a console warning:
+
+```
+[laramail] LogProvider is intended for development only. Do not use in production.
+```
+
+This helps catch accidental deployments with the log driver active.
+
+---
+
+## Return Value
+
+The log provider always returns a successful response:
+
+```typescript
+{
+  success: true,
+  messageId: 'log-1710500000000'  // 'log-' + timestamp
+}
+```
+
+This means your application code works the same regardless of driver — you can check `result.success` and handle `result.messageId` without conditional logic.
+
+---
+
+## Environment-Based Driver Selection
+
+A common pattern is to use `log` in development and a real provider in production:
+
+```typescript
+Mail.configure({
+  default: process.env.NODE_ENV === 'production' ? 'sendgrid' : 'log',
+  from: { address: 'noreply@example.com', name: 'My App' },
+  mailers: {
+    log: { driver: 'log' },
+    sendgrid: { driver: 'sendgrid', apiKey: process.env.SENDGRID_API_KEY! },
+  },
+});
+```
+
+---
+
+## Configuration
+
+```typescript
+interface LogConfig extends MailerConfig {
+  driver: 'log';
+}
+```
+
+No additional configuration options — just set `driver: 'log'`.
+
+---
+
+## Direct Usage
+
+The `LogProvider` class is exported and can be used directly:
+
+```typescript
+import { LogProvider } from 'laramail';
+
+const provider = new LogProvider();
+const result = await provider.send({
+  to: 'user@example.com',
+  subject: 'Test',
+  html: '<p>Hello</p>',
+});
+// Prints formatted output to console
+// result.success === true
+```

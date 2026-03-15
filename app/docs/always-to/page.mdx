@@ -1,0 +1,171 @@
+export const metadata = {
+  title: "Always-To Redirect",
+  description: "Redirect all outgoing emails to a single address for staging and QA environments. Clears CC/BCC automatically.",
+};
+
+# Always-To Redirect
+
+Redirect all outgoing emails to a single address. CC and BCC are cleared automatically. This is a safety net for staging and QA environments — your app sends emails normally, but they all land in one inbox.
+
+---
+
+## Quick Start
+
+### Via Method
+
+```typescript
+import { Mail } from 'laramail';
+
+Mail.configure({ /* your normal config */ });
+
+// Redirect all emails to the dev team
+Mail.alwaysTo('dev-team@example.com');
+
+// This email goes to dev-team@example.com, NOT user@example.com
+await Mail.to('user@example.com')
+  .cc('manager@example.com')
+  .subject('Welcome!')
+  .html('<p>Hello</p>')
+  .send();
+
+// Disable redirect
+Mail.alwaysTo(undefined);
+```
+
+### Via Config
+
+```typescript
+Mail.configure({
+  default: 'smtp',
+  from: { address: 'noreply@example.com', name: 'App' },
+  alwaysTo: process.env.NODE_ENV !== 'production'
+    ? 'staging-inbox@example.com'
+    : undefined,
+  mailers: {
+    smtp: { driver: 'smtp', host: '...', port: 587 },
+  },
+});
+```
+
+---
+
+## Behavior
+
+When `alwaysTo` is active:
+
+| Field | Effect |
+|-------|--------|
+| **to** | Overridden with the `alwaysTo` address |
+| **cc** | Cleared |
+| **bcc** | Cleared |
+| **subject** | Preserved |
+| **html/text** | Preserved |
+| **from** | Preserved |
+| **attachments** | Preserved |
+| **headers** | Preserved (including priority headers) |
+
+---
+
+## Timing
+
+The redirect is applied **after** preprocessing (markdown rendering, priority header conversion, template rendering) but **before** rate limiting and events. This means:
+
+- Priority headers are already set when the redirect happens
+- Events see the redirected address (useful for verifying redirect behavior in logs)
+- Rate limiting applies to the redirected sends
+
+---
+
+## Preview Support
+
+`alwaysTo` also applies to `preview()`:
+
+```typescript
+Mail.alwaysTo('dev@example.com');
+
+const preview = await Mail.to('user@example.com')
+  .subject('Hello')
+  .html('<p>Hi</p>')
+  .preview();
+
+console.log(preview.to);  // 'dev@example.com'
+console.log(preview.cc);  // undefined
+```
+
+---
+
+## Fake Mode
+
+`Mail.alwaysTo()` is **skipped** when in fake mode (`Mail.fake()`). This prevents the redirect from interfering with test assertions:
+
+```typescript
+Mail.fake();
+Mail.alwaysTo('redirect@example.com'); // Does nothing in fake mode
+
+await Mail.to('user@example.com').send(new WelcomeEmail());
+Mail.assertSent(WelcomeEmail, (m) => m.hasTo('user@example.com')); // Works!
+```
+
+---
+
+## Environment Pattern
+
+A common production pattern uses environment variables:
+
+```typescript
+// laramail.config.ts
+import { defineConfig } from 'laramail';
+
+export default defineConfig({
+  default: 'smtp',
+  from: { address: 'noreply@myapp.com', name: 'My App' },
+  alwaysTo: process.env.MAIL_ALWAYS_TO, // Set in staging, unset in production
+  mailers: {
+    smtp: {
+      driver: 'smtp',
+      host: process.env.SMTP_HOST!,
+      port: 587,
+      auth: { user: process.env.SMTP_USER!, pass: process.env.SMTP_PASS! },
+    },
+  },
+});
+```
+
+```bash
+# .env.staging
+MAIL_ALWAYS_TO=staging@myapp.com
+
+# .env.production
+# MAIL_ALWAYS_TO is not set — emails go to real recipients
+```
+
+---
+
+## API Reference
+
+### `Mail.alwaysTo(address)`
+
+```typescript
+Mail.alwaysTo(address: string | undefined): void
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `address` | `string \| undefined` | The redirect address, or `undefined` to disable |
+
+### `MailManager.setAlwaysTo(address)`
+
+```typescript
+manager.setAlwaysTo(address: string | undefined): void
+```
+
+Works the same way on a `MailManager` instance directly.
+
+### Config Option
+
+```typescript
+interface MailConfig {
+  // ...existing fields
+  alwaysTo?: string;  // Redirect all emails to this address
+}
+```

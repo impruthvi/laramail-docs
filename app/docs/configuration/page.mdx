@@ -21,6 +21,7 @@ interface MailConfig {
   queue?: QueueConfig;                      // Queue configuration
   markdown?: MarkdownConfig;                // Markdown configuration
   failover?: FailoverConfig;                // Global failover configuration
+  alwaysTo?: string;                        // Redirect all emails to this address
 }
 ```
 
@@ -30,7 +31,7 @@ Base configuration for any mailer. Each driver extends this with driver-specific
 
 ```typescript
 interface MailerConfig {
-  driver: 'smtp' | 'sendgrid' | 'ses' | 'mailgun' | 'resend' | 'postmark' | 'mailtrap';
+  driver: 'smtp' | 'sendgrid' | 'ses' | 'mailgun' | 'resend' | 'postmark' | 'log' | (string & {});
   failover?: FailoverConfig;  // Per-mailer failover override
   [key: string]: unknown;     // Driver-specific fields
 }

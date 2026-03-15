@@ -9,6 +9,17 @@ All notable changes to `laramail` are documented here.
 
 ---
 
+## v1.3.0
+
+**Developer Experience** — 3 new features for better development and staging workflows.
+
+- **[Log Transport](/docs/log-transport)** — `LogProvider` prints formatted email details to console instead of sending. Warns if used in production. No SMTP or API keys needed for local development.
+- **[Custom Providers](/docs/custom-providers)** — `Mail.extend(driver, factory)` registers custom mail providers. Custom providers are checked before built-in drivers, allowing overrides and third-party integrations.
+- **[Always-To Redirect](/docs/always-to)** — `Mail.alwaysTo(address)` redirects all emails to a single address, clearing CC/BCC. Perfect for staging environments. Also applies to `preview()`. Skipped in fake mode.
+- 35 new tests (645 total)
+
+---
+
 ## v1.2.0
 
 **Package renamed to laramail**
