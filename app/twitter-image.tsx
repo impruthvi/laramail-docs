@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "laramail — Email for Node.js, Done Right";
+export const alt = "laramail — AdonisJS mailer, but framework-agnostic";
 export const size = {
   width: 1200,
   height: 630,
@@ -18,10 +18,10 @@ export default async function Image() {
             laramail
           </span>
           <span tw="text-6xl font-bold text-white mb-4">
-            Email for Node.js, Done Right.
+            Mail.fake() + Mail.assertSent()
           </span>
           <span tw="text-2xl text-zinc-400">
-            Laravel-inspired email library with TypeScript support
+            AdonisJS mailer, but framework-agnostic — zero-setup email testing
           </span>
         </div>
       </div>

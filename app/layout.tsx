@@ -20,22 +20,22 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://laramail.impruthvi.me"),
   title: {
-    default: "laramail — Email for Node.js, Done Right",
+    default: "laramail — AdonisJS mailer, but framework-agnostic",
     template: "%s | laramail",
   },
-  description: "Laravel-inspired, lightweight, modular email library for Node.js with full TypeScript support. 6 providers, template engines, queue support, markdown mail, and more.",
-  keywords: ["laramail", "email", "nodejs", "typescript", "smtp", "sendgrid", "ses", "mailgun", "resend", "postmark", "laravel", "mailable"],
+  description: "Laravel-style mailer for Node.js — Mail.fake() + Mail.assertSent() for zero-setup email testing, provider switching via env var, works with Express/Fastify/any framework.",
+  keywords: ["laramail", "email", "nodejs", "typescript", "mail fake", "email testing", "smtp", "sendgrid", "ses", "mailgun", "resend", "postmark", "laravel", "mailable", "nodemailer mock"],
   authors: [{ name: "impruthvi" }],
   openGraph: {
-    title: "laramail — Email for Node.js, Done Right",
-    description: "Laravel-inspired, lightweight, modular email library for Node.js with full TypeScript support.",
+    title: "laramail — AdonisJS mailer, but framework-agnostic",
+    description: "Mail.fake() + Mail.assertSent() for zero-setup email testing. No Mailtrap, no mock setup. Works with Express, Fastify, or any Node.js app.",
     type: "website",
     url: "https://laramail.impruthvi.me",
   },
   twitter: {
     card: "summary_large_image",
     title: "laramail",
-    description: "Laravel-inspired email library for Node.js",
+    description: "Mail.fake() + Mail.assertSent() — zero-setup email testing for Node.js",
   },
 };
 

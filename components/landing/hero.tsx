@@ -79,7 +79,7 @@ export function Hero() {
             >
               <Link href="/docs/changelog" className="relative inline-flex items-center gap-2 px-4 py-1.5 mb-8 rounded-full border border-white/10 bg-white/[0.03] text-sm text-muted-foreground overflow-hidden hover:border-white/20 hover:bg-white/[0.06] transition-all duration-300">
                 <span className="relative z-10">
-                  v{LARAMAIL_VERSION} &mdash; Log Transport, Custom Providers &amp; Always-To
+                  v{LARAMAIL_VERSION} &mdash; AdonisJS mailer, but framework-agnostic
                 </span>
                 {/* Shimmer effect */}
                 <div className="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/[0.07] to-transparent" />
@@ -94,9 +94,9 @@ export function Hero() {
               animate={isInView ? "visible" : "hidden"}
               className="text-3xl sm:text-5xl lg:text-7xl font-extrabold tracking-tight leading-[1.08]"
             >
-              Email for Node.js,
+              Test emails without
               <br />
-              <span className="text-gradient">Done Right.</span>
+              <span className="text-gradient">the mock setup.</span>
             </motion.h1>
 
             {/* Subheading */}
@@ -107,8 +107,7 @@ export function Hero() {
               animate={isInView ? "visible" : "hidden"}
               className="mt-6 text-lg sm:text-xl text-muted-foreground max-w-lg leading-relaxed"
             >
-              A fluent, provider-agnostic email library for Node.js with
-              built-in templates, queues, failover, and testing utilities.
+              AdonisJS mailer, but framework-agnostic. <code className="text-foreground font-mono text-sm">Mail.fake()</code> + <code className="text-foreground font-mono text-sm">Mail.assertSent()</code> for zero-setup email testing. Works with Express, Fastify, or any Node.js app.
             </motion.p>
 
             {/* CTA buttons */}

@@ -15,7 +15,7 @@ import {
 // ─── Version ─────────────────────────────────────────────────────────────────
 // Single source of truth for the current laramail version.
 // Used by: hero badge, sidebar "New" badges, version banner.
-export const LARAMAIL_VERSION = "1.4.0";
+export const LARAMAIL_VERSION = "1.4.1";
 
 // ─── Brand Colors ────────────────────────────────────────────────────────────
 export const BRAND = {
@@ -188,23 +188,12 @@ export const STATS = [
 export const CODE_EXAMPLES = {
   quickStart: `import { Mail } from 'laramail';
 
-Mail.configure({
-  default: 'smtp',
-  from: { address: 'noreply@example.com', name: 'My App' },
-  mailers: {
-    smtp: {
-      driver: 'smtp',
-      host: 'smtp.example.com',
-      port: 587,
-      auth: { user: 'username', pass: 'password' },
-    },
-  },
-});
-
-await Mail.to('user@example.com')
-  .subject('Welcome!')
-  .html('<h1>Hello World!</h1>')
-  .send();`,
+// Zero-setup email testing — no SMTP server, no network, no mocks.
+Mail.fake();
+await Mail.to('user@example.com').send(new WelcomeEmail(user));
+Mail.assertSent(WelcomeEmail, (mail) => mail.hasTo('user@example.com'));
+Mail.assertSentCount(WelcomeEmail, 1);
+Mail.restore();`,
 
   fluentApi: `await Mail.to('user@example.com')
   .subject('Complete Example')

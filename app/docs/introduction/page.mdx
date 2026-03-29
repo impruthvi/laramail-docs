@@ -1,15 +1,24 @@
 export const metadata = {
   title: "Introduction & Overview",
-  description: "Learn about laramail, a Laravel-inspired email library for Node.js with TypeScript support, 6 providers, template engines, and queue support.",
+  description: "AdonisJS mailer, but framework-agnostic. Mail.fake() + Mail.assertSent() for zero-setup email testing. Works with Express, Fastify, or any Node.js app.",
 };
 
 # Introduction & Overview
 
-**laramail** brings the simplicity and elegance of Laravel's Mail system to the Node.js ecosystem with full TypeScript support.
+**laramail** is the AdonisJS mailer, but framework-agnostic — works with Express, Fastify, or any Node.js app.
+
+The real differentiator: `Mail.fake()` + `Mail.assertSent()` for zero-setup email testing. No Mailtrap. No nodemailer mock setup. No grepping console output.
+
+```typescript
+Mail.fake();
+await Mail.to('user@example.com').send(new WelcomeEmail(user));
+Mail.assertSent(WelcomeEmail, (mail) => mail.hasTo('user@example.com'));
+```
 
 ## Philosophy
 
-- **Laravel-inspired** — If you've used `Mail::to()->send()` in Laravel, you'll feel right at home.
+- **Testing-first** — `Mail.fake()` is a first-class feature, not an afterthought. Test emails the same way you test everything else.
+- **Framework-agnostic** — Inspired by AdonisJS mailer and Laravel's Mail facade. Works with any Node.js framework.
 - **Lightweight** — Base package is ~25 MB (SMTP only). Install additional providers as needed.
 - **Modular** — Providers, template engines, queue drivers, and markdown support are all optional peer dependencies.
 - **Type-safe** — Full TypeScript support with strict typing throughout.
@@ -18,12 +27,14 @@ export const metadata = {
 
 | Feature | Details |
 |---------|---------|
-| **Providers** | SMTP (Nodemailer), SendGrid, AWS SES, Mailgun, Resend, Postmark |
+| **Testing** | `Mail.fake()` with Laravel-style send/queue assertions — zero setup |
+| **Providers** | SMTP, SendGrid, AWS SES, Mailgun, Resend, Postmark, Log Transport, Custom |
 | **Template Engines** | Handlebars, EJS, Pug |
 | **Queue** | Bull, BullMQ, Sync (dev) |
 | **Markdown Mail** | Write emails in Markdown with button, panel, and table components |
 | **Provider Failover** | Automatic failover chain with retries, delays, and monitoring callbacks |
-| **Testing** | `Mail.fake()` with Laravel-style send/queue assertions |
+| **Rate Limiting** | Per-provider sliding window rate limiting |
+| **Email Events** | Hook into sending, sent, and failed lifecycle events |
 
 ## Requirements
 
@@ -32,6 +43,6 @@ export const metadata = {
 
 ## Stats
 
-- 269 tests passing
+- 774 tests passing
 - 85%+ code coverage
 - MIT license
