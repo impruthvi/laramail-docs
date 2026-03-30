@@ -15,7 +15,7 @@ import {
 // ─── Version ─────────────────────────────────────────────────────────────────
 // Single source of truth for the current laramail version.
 // Used by: hero badge, sidebar "New" badges, version banner.
-export const LARAMAIL_VERSION = "1.4.1";
+export const LARAMAIL_VERSION = "1.4.3";
 
 // ─── Brand Colors ────────────────────────────────────────────────────────────
 export const BRAND = {
